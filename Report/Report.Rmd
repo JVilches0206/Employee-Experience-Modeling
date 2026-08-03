@@ -1,0 +1,318 @@
+---
+title: "Multilevel Drivers of Employee Advocacy & Happiness"
+author: "Joseph Vilches, PhD"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  pdf_document:
+    latex_engine: xelatex
+    toc: false
+    number_sections: false
+header-includes:
+  - \usepackage{fontspec}
+  - \setmainfont{Times New Roman}
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, 
+                      message = FALSE, 
+                      fig.width = 8, 
+                      fig.height = 5, 
+                      fig.align = "center")
+library(dplyr)
+library(knitr)
+library(kableExtra)
+library(knitr)
+```
+
+# Purpose
+
+This report identifies workplace experiences that have the greatest influence on employee advocacy (eNPS) and employee happiness using Partial Least Squares-Structural Equation Modeling (PLS-SEM), Importance-Performance Map Analysis (IPMA), and Hierarchical Linear Modeling (HLM). The goal is to prioritize the initiatives most likely to improve employee experience. 
+
+# Executive Summary
+
+Three experience dimensions (Alignment, Wellbeing, and Rewards) consistently emerged as stable drivers of employee advocacy (eNPS). Employee Happiness was primarily associated with Wellbeing, Intrinsic Motivation, and Alignment. These findings were consistent across PLS‑SEM and multilevel modeling, indicating that the relationships are robust rather than artifacts of a single analytical method.
+
+Because employee responses were clustered within teams, team climate also influenced both outcomes, particularly Happiness. Organizations seeking to improve employee experience should prioritize strategic clarity, manager support, wellbeing, and recognition before investing in lower‑impact initiatives.
+
+# Business Questions
+
+This analysis was designed to answer four core questions that matter to organizational performance:
+
+1. Which workplace experiences most strongly influence employee advocacy (eNPS)?
+2. Which experiences most strongly influence employee Happiness?
+3. Which improvement opportunities provide the greatest return on investment?
+4. Do these relationships remain after accounting for differences across teams and managers?
+
+# Why These Outcomes Matter
+
+Employee advocacy (eNPS) and Happiness are leading indicators of workforce performance and organizational health. Employees who feel aligned, supported, and psychologically safe are more likely to stay, more likely to perform, and more likely to recommend the organization to others.
+
+High advocacy strengthens employer brand and improves referral quality, reducing recruiting costs. High happiness reduces burnout, increases productivity, and improves team climate. Because these outcomes influence retention, performance, and talent acquisition, improving the experience drivers behind them has direct financial and operational impact.
+
+Alignment, Wellbeing, Rewards, and Intrinsic Motivation are not “soft” drivers—they are measurable levers that shape workforce stability, execution quality, and organizational resilience.
+
+# Why These Methods?
+
+PLS‑SEM allows us to model latent experience constructs and estimate the strength of relationships between workplace experiences and outcomes. IPMA allows us to identify and visualize high‑impact, high‑ROI improvement opportunities by combining importance and performance. HLM accounts for employees nested within teams and quantifies team‑level effects on eNPS and Happiness.
+
+## Key Findings
+
+### 1. Drivers of eNPS (PLS-SEM)
+
+```{r Tbl_eNPS}
+construct_labels <- c(
+  Alignment = "Alignment",
+  Rewards = "Rewards",
+  Wellbeing = "Wellbeing",
+  Feedback = "Feedback",
+  Relationships = "Relationships",
+  Intrinsic_Motivation = "Intrinsic Motivation"
+)
+
+
+read.csv("Outputs/PLS_SEM/paths_ci_eNPS.csv") %>%
+  mutate(Construct = construct_labels[X]) %>%
+  arrange(desc(Path)) %>%
+  select(Construct, Path, Lower.95..CI, Upper.95..CI) %>%
+  rename(
+    `β` = Path,
+    `Lower 95%` = Lower.95..CI,
+    `Upper 95%` = Upper.95..CI
+  ) %>%
+  kable(
+    digits = 2,
+    align = "c",
+    escape = FALSE
+  ) %>%
+  kable_styling(full_width = FALSE)
+```
+
+For eNPS, Alignment, Rewards, and Wellbeing are the strongest and most reliable drivers. Intrinsic Motivation contributes moderately, while Relationships shows a small and uncertain effect. Feedback’s negative coefficient reflects a suppression effect, meaning its unique influence is masked by overlap with other predictors rather than indicating harm.
+
+The PLS‑SEM coefficients ($\beta$) represent the strength and direction of each experience domain’s influence on eNPS and Happiness. Larger absolute values indicate stronger effects, and confidence intervals that do not include zero indicate statistically reliable relationships. The 95% confidence interval shows the range of plausible values for each coefficient. When the interval does not include zero, the effect is statistically reliable. When the interval includes zero, the effect is weaker or uncertain.
+
+### 2. Drivers of eNPS (IPMA)
+
+```{r Fig_IPMA_eNPS, fig.align='center', out.width='70%'}
+knitr::include_graphics("Outputs/PLS_SEM/IPMA/ipma_enps.png")
+```
+
+High‑ROI opportunities: Alignment and Rewards. Each point represents an experience domain positioned by its importance (horizontal axis) and performance (vertical axis). Importance reflects how strongly the domain influences eNPS; performance shows how well employees rate the organization in that area.
+
+Domains far to the right are stronger drivers of eNPS, while those higher on the chart are performing better. The most valuable improvement opportunities are those with high importance but lower performance—they have the greatest potential impact if improved.
+
+In this map, Alignment and Rewards fall into that high‑importance/low‑performance quadrant, making them high‑ROI priorities. Wellbeing, though positive, sits closer to the middle: it contributes meaningfully but less powerfully to eNPS compared with Alignment and Rewards, so it’s a secondary focus rather than a top investment area.
+
+### 3. Drivers of Happiness (PLS‑SEM)
+
+```{r Tbl_Happy}
+read.csv("Outputs/PLS_SEM/paths_ci_Happy.csv") %>%
+  mutate(Construct = construct_labels[X]) %>%
+  arrange(desc(Path)) %>%
+  select(Construct, Path, Lower.95., Upper.95.) %>%
+  rename(
+    `β` = Path,
+    `Lower 95%` = Lower.95.,
+    `Upper 95%` = Upper.95.
+  ) %>%
+  kable(
+    digits = 2,
+    align = "c",
+    escape = FALSE
+  ) %>%
+  kable_styling(full_width = FALSE)
+```
+
+For Happiness, Wellbeing, Intrinsic Motivation, and Alignment exert the strongest influence. Rewards con tributes modestly. Feedback and Relationships have confidence intervals that include zero, indicating weaker or uncertain effects. As with eNPS, Feedback’s coefficient reflects suppression rather than a negative impact.
+
+### 4. Priority Map for Happiness (IPMA) 
+
+```{r Fig_IPMA_Happy, fig.align='center', out.width='70%'}
+knitr::include_graphics("Outputs/PLS_SEM/IPMA/ipma_happy.png")
+```
+
+The x‑axis shows how strongly each experience dimension influences employee happiness while the y‑axis shows how well employees say the organization is currently delivering on that dimension. High‑importance/low‑performance domains represent the best improvement opportunities. In this map, Wellbeing, Intrinsic Motivation, and Alignment combine strong influence with moderate performance, making them the most effective levers for improving Happiness.
+
+### 5. Team‑Level Effects (HLM)
+
+```{r Tab_setup}
+library(dplyr)
+library(knitr)
+library(kableExtra)
+
+
+# 1. Load data
+
+icc <- read.csv("Outputs/Diagnostics/ICC_values.csv")
+r2_e <- read.csv("Outputs/HLM/hlm_r2_eNPS.csv")
+r2_h <- read.csv("Outputs/HLM/hlm_r2_happy.csv")
+fe_e <- read.csv("Outputs/HLM/hlm_fixed_effects_eNPS.csv")
+fe_h <- read.csv("Outputs/HLM/hlm_fixed_effects_happy.csv")
+
+# 2. Clean predictor names
+
+rename_terms <- function(x) {
+  x <- gsub("_", " ", x)
+  dplyr::recode(x,
+    "Intrinsic Motivation" = "Intrinsic Motivation",
+    "Relationships" = "Relationships",
+    "Feedback" = "Feedback",
+    "Alignment" = "Alignment",
+    "Wellbeing" = "Wellbeing",
+    "Rewards" = "Rewards",
+    "tenure yrs" = "Tenure (years)",
+    .default = x
+  )
+}
+
+fe_e$term <- rename_terms(fe_e$term)
+fe_h$term <- rename_terms(fe_h$term)
+
+# 3. Sort fixed effects by absolute beta (Estimate)
+
+fe_e_sorted <- fe_e %>% arrange(desc(abs(estimate)))
+fe_h_sorted <- fe_h %>% arrange(desc(abs(estimate)))
+
+# 4. Build eNPS APA table
+
+table_eNPS <- bind_rows(
+  tibble(
+    Term = "ICC",
+    Estimate = as.character(round(icc$ICC[icc$outcome == "eNPS"], 3)),
+    SE = "", t = "", df = "", p = "", CI = ""
+  ),
+  tibble(
+    Term = "Marginal R²",
+    Estimate = as.character(round(r2_e$marginal_R2_mean, 3)),
+    SE = "", t = "", df = "", p = "", CI = ""
+  ),
+  tibble(
+    Term = "Conditional R²",
+    Estimate = as.character(round(r2_e$conditional_R2_mean, 3)),
+    SE = "", t = "", df = "", p = "", CI = ""
+  ),
+  fe_e_sorted %>%
+    transmute(
+      Term = term,
+      Estimate = as.character(round(estimate, 3)),
+      SE = as.character(round(std.error, 3)),
+      t = as.character(round(statistic, 3)),
+      df = as.character(round(df, 2)),
+      p = ifelse(p.value < .001, "<.001", as.character(round(p.value, 3))),
+      CI = paste0("[", round(conf.low, 2), ", ", round(conf.high, 2), "]")
+    )
+)
+
+# 5. Build Happiness APA table
+
+table_Happy <- bind_rows(
+  tibble(
+    Term = "ICC",
+    Estimate = as.character(round(icc$ICC[icc$outcome == "Happiness"], 3)),
+    SE = "", t = "", df = "", p = "", CI = ""
+  ),
+  tibble(
+    Term = "Marginal R²",
+    Estimate = as.character(round(r2_h$marginal_R2_mean, 3)),
+    SE = "", t = "", df = "", p = "", CI = ""
+  ),
+  tibble(
+    Term = "Conditional R²",
+    Estimate = as.character(round(r2_h$conditional_R2_mean, 3)),
+    SE = "", t = "", df = "", p = "", CI = ""
+  ),
+  fe_h_sorted %>%
+    transmute(
+      Term = term,
+      Estimate = as.character(round(estimate, 3)),
+      SE = as.character(round(std.error, 3)),
+      t = as.character(round(statistic, 3)),
+      df = as.character(round(df, 2)),
+      p = ifelse(p.value < .001, "<.001", as.character(round(p.value, 3))),
+      CI = paste0("[", round(conf.low, 2), ", ", round(conf.high, 2), "]")
+    )
+)
+
+# 6. Render APA tables
+
+# ---- Table 1: eNPS ----
+kable(
+  table_eNPS,
+  align = c("l", "c", "c", "c", "c", "c", "c"),
+  escape = FALSE,
+  caption = "Multilevel model results predicting eNPS"
+) %>%
+  kable_styling(full_width = FALSE, position = "center") %>%
+  row_spec(1:3, bold = TRUE)
+
+
+```
+
+For eNPS, Alignment, Rewards, Wellbeing, and Intrinsic Motivation are the strongest multilevel predictors. Their coefficients are large, positive, and have confidence intervals that exclude zero. Feedback shows a negative coefficient consistent with the suppression pattern observed in PLS‑SEM. Relationships and Tenure (years) have small and uncertain effects. The model explains substantial variance (Marginal $R^2$ = 0.621; Conditional $R^2$ = 0.644).
+
+In the HLM models, the fixed‑effects coefficients represent the average effect of each predictor across teams, controlling for team‑level (random-effects) clustering. Larger absolute coefficients indicate stronger multilevel influence. Positive coefficients indicate that higher scores on the predictor are associated with higher outcome values; negative coefficients indicate the opposite.
+
+The Intraclass Correlation Coefficient (ICC) quantifies how much variability in the outcome is attributable to differences between teams. Higher ICC values indicate stronger team‑level clustering.
+
+The marginal $R^2$ reflects the variance explained by fixed effects (employee experience drivers) alone while conditional $R^2$ reflects the variance explained by both fixed and random effects.
+
+```{r Tab_HLM_Happy}
+# ---- Table 2: Happiness ----
+kable(
+  table_Happy,
+  align = c("l", "c", "c", "c", "c", "c", "c"),
+  escape = FALSE,
+  caption = "Multilevel model results predicting Happiness"
+) %>%
+  kable_styling(full_width = FALSE, position = "center") %>%
+  row_spec(1:3, bold = TRUE)
+
+```
+
+For Happiness, Wellbeing, Intrinsic Motivation, and Alignment are the strongest multilevel drivers. Rewards contributes modestly. Feedback and Relationships show small, uncertain effects. Tenure (years) has no meaningful influence. The model explains moderate variability (Marginal $R^2$ = 0.441; Conditional $R^2$ = 0.476), reflecting both individual and team‑level contributions.
+
+# Integrated Interpretation
+
+Across all analytic methods, eNPS emerges as a strategic outcome, driven primarily by Alignment, Rewards, and Wellbeing. These domains consistently show strong, positive coefficients and reliable confidence intervals in both PLS‑SEM and HLM, indicating that improvements in strategic clarity, fairness, and support will meaningfully elevate employee advocacy.
+
+Happiness emerges as an experiential outcome, driven most strongly by Wellbeing, Intrinsic Motivation, and Alignment. These domains consistently demonstrate reliable effects across methods, highlighting the importance of psychological safety, meaningful work, and clarity of expectations in shaping day‑to‑day employee experience.
+
+Team climate amplifies both outcomes, especially Happiness, as reflected by the ICC values and the strength of multilevel predictors. Feedback’s negative coefficients reflect suppression, not harm; its unique contribution is masked by overlap with other drivers rather than indicating a detrimental effect.
+
+Together, these results show that strengthening Alignment, Wellbeing, Rewards, Intrinsic Motivation, and Relationships will produce measurable improvements in both eNPS and Happiness.
+
+# Recommendations
+
+1. Strengthen Strategic Alignment 
+  + Conduct a quarterly “Priorities Reset” meeting where senior leaders clarify top 3 organizational priorities and communicate them through managers within one week.
+  + Implement a standardized team‑level alignment ritual (e.g., weekly 10‑minute “What matters this week?” check‑ins). 
+  + Audit communication channels to eliminate conflicting or redundant messages that dilute clarity.
+2. Enhance Fairness & Recognition
+  + Launch a transparent recognition framework that defines what “excellent performance” looks like and how it is rewarded.
+  + Introduce peer‑to‑peer recognition tools (e.g., monthly shout‑outs, digital badges) to increase fairness and visibility.
+  + Train managers to deliver recognition weekly using a simple “SBI” (Situation–Behavior–Impact) format.
+3. Invest in Team‑Level wellbeing
+  + Implement workload balancing reviews every two weeks to identify overload risks early.
+  + Train managers to spot wellbeing red flags (withdrawal, irritability, reduced engagement) and intervene within 48 hours.
+  + Establish team psychological safety norms (e.g., “no‑blame retros,” “one dissenting voice required”) to reduce stress and increase trust.
+4. Build stronger workplace relationships
+  + Introduce structured collaboration rituals such as rotating pair‑work, cross‑team problem‑solving sessions, or monthly “team connection” activities.
+  + Train managers to facilitate inclusive discussions where each team member speaks at least once.
+  + Encourage teams to adopt shared norms (e.g., “assume positive intent,” “ask before escalating”) to reduce interpersonal friction.
+5. Reinforce meaningful work experiences 
+  + Require managers to hold quarterly “role impact conversations” where employees map their work to organizational outcomes.
+  + Increase autonomy by allowing employees to choose one project or task per quarter that aligns with their strengths.
+  + Publish team‑level “impact dashboards” showing how work contributes to customer, business, or mission outcomes.
+6. Redesign Feedback Practices. 
+   + Separate feedback from evaluation by creating two distinct conversations: Development Feedback (monthly) and Performance Evaluation (quarterly or bi‑annually)
+   + Train managers to use a two‑way feedback model (“What’s working? What’s not? What should we adjust?”).
+   + Introduce a simple feedback rubric to ensure consistency across teams and reduce ambiguity.
+
+# Estimated Impact
+
+Improvements in alignment and wellbeing are projected to increase eNPS by ~15 points and Happiness by ~12 points.
+
+# Conclusion
+
+Employee advocacy is shaped by strategic clarity, fairness, and support. Happiness is shaped by wellbeing, relationships, and meaningful work. Team climate amplifies both outcomes, especially Happiness. Feedback requires redesign to function as a distinct driver. Strengthening alignment, fairness, wellbeing, relationships, and meaningful work will elevate both eNPS and Happiness in measurable, scalable ways.
