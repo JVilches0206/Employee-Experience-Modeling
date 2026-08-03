@@ -1,0 +1,4 @@
+"outcome","model_type","ICC"
+"Happiness","LMM",0.114
+"eNPS","LMM",0.147
+"Deletion","GLMM (binomial)",0.371

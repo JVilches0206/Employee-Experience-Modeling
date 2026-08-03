@@ -1,0 +1,9 @@
+"","Relationships","Intrinsic_Motivation","Feedback","Alignment","Wellbeing","Rewards","enps_score","avg_happiness"
+"Relationships",1,0.84,0.91,0.84,0.88,0.76,0.68,0.58
+"Intrinsic_Motivation",0.84,1,0.87,0.9,0.87,0.81,0.74,0.63
+"Feedback",0.91,0.87,1,0.86,0.91,0.8,0.7,0.61
+"Alignment",0.84,0.9,0.86,1,0.88,0.85,0.77,0.63
+"Wellbeing",0.88,0.87,0.91,0.88,1,0.81,0.74,0.63
+"Rewards",0.76,0.81,0.8,0.85,0.81,1,0.74,0.6
+"enps_score",0.68,0.74,0.7,0.77,0.74,0.74,1,0.59
+"avg_happiness",0.58,0.63,0.61,0.63,0.63,0.6,0.59,1
