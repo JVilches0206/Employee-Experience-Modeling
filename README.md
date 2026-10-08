@@ -2,11 +2,15 @@
 
 ## Overview
 
+Employee surveys can tell organizations how employees are experiencing work, but collecting responses is only the beginning. The harder People Analytics question is:
+
+> When employees report hundreds of different experiences, which ones should an organization investigate first—and how confident can we be that those relationships are meaningful?
+
 ### How do workplace experiences relate to employee advocacy and happiness?
 
-Employee experience surveys contain valuable information about how people experience their work. This project applies psychometric and statistical modeling to identify which aspects of employee experience are most strongly associated with **employee advocacy (eNPS)** and **employee happiness**.
+This project examines that question using employee survey data and a measurement-first analytical approach. Rather than treating individual survey questions as isolated predictors, the analysis organizes employee experience into broader latent constructs and evaluates how those constructs relate to **employee advocacy (eNPS)** and **employee happiness**.
 
-The analysis combines **SQL, psychometrics, multiple imputation, PLS-SEM, Importance-Performance Map Analysis (IPMA), and multilevel modeling** to move from survey data to actionable People Analytics insights.
+The analysis combines **SQL, psychometrics, multiple imputation, PLS-SEM, Importance-Performance Map Analysis (IPMA), and multilevel modeling** to move from survey data to evidence that can support further organizational investigation.
 
 > **Important:** This is an observational, cross-sectional analysis. Results describe associations and potential areas for investigation; they do not establish causal effects.
 
@@ -27,7 +31,7 @@ The analysis combines **SQL, psychometrics, multiple imputation, PLS-SEM, Import
 - Conditional $R^2$ = 0.48
 
 ### Where should organizations focus?
-Importance-Performance Map Analysis identified areas that combine relatively strong relationships with the outcomes and opportunities for improvement.
+Importance-Performance Map Analysis adds a practical dimension to the statistical results by identifying areas that combine relatively strong relationships with the outcomes and greater opportunity for improvement.
 
 |Outcome|	Highest-priority areas |
 |--------|-----------------------|
@@ -49,7 +53,7 @@ Importance-Performance Map Analysis identified areas that combine relatively str
 
 ## Team Context Matters
 
-Employees are nested within teams, so employee-level observations are not necessarily independent. Multilevel modeling was used to account for this structure.
+Employees are nested within teams, so employee-level observations are not independent. Assuming that clustered observations are independent can lead to overly optimistic uncertainty estimates and misleading statistical inferences. Multilevel modeling was therefore used to account for the hierarchical structure of the data.
 
 The difference between marginal and conditional $R^2$ indicates that **team-level context provides additional explanatory information**, particularly for employee happiness.
 
@@ -61,11 +65,17 @@ This suggests that employee experience may not be solely an individual-level phe
 
 ## An Important Model Finding
 
-Feedback showed a negative coefficient in the multivariate models despite having a positive bivariate relationship with the outcomes.
+Feedback provides an important example of why employee-experience analytics cannot rely on individual relationships alone.
 
-This pattern is consistent with **statistical suppression**, rather than evidence that feedback is harmful. When correlated employee-experience dimensions are modeled simultaneously, coefficients represent each predictor's unique association after accounting for the others.
+Feedback showed a negative $\beta$ coefficient in the multivariate models despite having a positive correlation with the outcomes.
 
-This is an important consideration in People Analytics: **individual coefficients should be interpreted within the broader model rather than in isolation.**
+This is **not evidence that feedback is harmful**. Rather, this pattern is consistent with **statistical suppression**. When correlated employee-experience dimensions are modeled simultaneously, coefficients represent each predictor's unique association after accounting for the others. When correlated employee-experience dimensions are modeled simultaneously, each coefficient represents the predictor's estimated unique association after accounting for the other predictors.
+
+When predictors share substantial information, it becomes more difficult to distinguish which predictor is contributing information that is unique to that predictor. In this case, shared information among the employee-experience dimensions appears to affect the estimated Feedback $\beta$ coefficient, resulting in a negative coefficient in the multivariate model despite its positive correlation.
+
+The important point is not that the presence of suppression invalidates the analysis. Instead, it demonstrates why **individual coefficients should be interpreted within the broader model rather than in isolation**.
+
+The broader pattern of results remains informative: multiple analytical approaches identify consistent relationships among several employee-experience dimensions and the outcomes, while the suppression finding highlights an important limitation in assigning those relationships to completely independent predictors.
 
 ---
 
@@ -140,7 +150,7 @@ The findings point to several areas for organizational investigation:
 - Intrinsic Motivation: Do employees experience meaning, autonomy, and purpose in their work?
 - Team context: Do employee experiences vary systematically across teams or managers?
 
-The analysis is intended to help identify where organizations might look next, rather than prescribe specific interventions. For example, a strong association between wellbeing and happiness does not establish that increasing wellbeing will cause happiness to increase. Establishing that relationship would require longitudinal, experimental, or quasi-experimental evidence.
+The analysis is intended to help identify **where organizations might look next**, rather than prescribe specific interventions. A strong association between wellbeing and happiness, for example, does not establish that increasing wellbeing will cause happiness to increase. Establishing that relationship would require longitudinal, experimental, or quasi-experimental evidence.
 
 ## Limitations
 This analysis is observational and therefore identifies associations rather than causal effects. 
