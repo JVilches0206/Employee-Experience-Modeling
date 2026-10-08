@@ -1,5 +1,6 @@
 ---
-title: "Multilevel Drivers of Employee Advocacy & Happiness"
+title: "Employee Experience Analytics: Drivers of Advocacy & Happiness"
+subtitle: "A People Analytics analysis using psychometrics, PLS-SEM, and multilevel modeling"
 author: "Joseph Vilches, PhD"
 date: "`r format(Sys.time(), '%B %d, %Y')`"
 output:
@@ -20,45 +21,163 @@ knitr::opts_chunk$set(echo = FALSE,
                       fig.height = 5, 
                       fig.align = "center")
 library(dplyr)
-library(knitr)
 library(kableExtra)
 library(knitr)
 ```
 
-# Purpose
-
-This report identifies workplace experiences that have the greatest influence on employee advocacy (eNPS) and employee happiness using Partial Least Squares-Structural Equation Modeling (PLS-SEM), Importance-Performance Map Analysis (IPMA), and Hierarchical Linear Modeling (HLM). The goal is to prioritize the initiatives most likely to improve employee experience. 
-
 # Executive Summary
+## Overarching Question
 
-Three experience dimensions (Alignment, Wellbeing, and Rewards) consistently emerged as stable drivers of employee advocacy (eNPS). Employee Happiness was primarily associated with Wellbeing, Intrinsic Motivation, and Alignment. These findings were consistent across PLS‑SEM and multilevel modeling, indicating that the relationships are robust rather than artifacts of a single analytical method.
+> Which aspects of the employee experience are most strongly associated with employee advocacy and happiness, and where should organizations prioritize further investigation?
 
-Because employee responses were clustered within teams, team climate also influenced both outcomes, particularly Happiness. Organizations seeking to improve employee experience should prioritize strategic clarity, manager support, wellbeing, and recognition before investing in lower‑impact initiatives.
+## Key Findings 
+
+- **Employee advocacy (eNPS)**: Alignment, Rewards, and Wellbeing show the strongest and most consistently estimated positive associations with employee advocacy.
+- **Employee happiness**: Wellbeing, Intrinsic Motivation, and Alignment show the strongest positive associations with Happiness.
+- **Improvement priorities**: Importance–Performance Map Analysis identifies Alignment and Rewards as prominent improvement priorities for eNPS, while Wellbeing, Intrinsic Motivation, and Alignment are prominent priorities for Happiness.
+- **Team context**: Employees are nested within teams, and multilevel modeling indicates that team-level context contributes additional explanatory information, particularly for Happiness.
+- **Measurement and modeling**: The analysis combines psychometric evaluation, PLS-SEM, Importance–Performance Map Analysis, and multilevel modeling to evaluate measurement quality, relationships among employee-experience constructs, improvement priorities, and organizational context.
+
+## People Analytics Implications
+
+The findings identify several employee-experience dimensions that organizations may wish to investigate through targeted employee listening, including strategic alignment, recognition and rewards, wellbeing, and meaningful work.
+
+The analytical results can therefore be used as a prioritization framework: identify high-priority dimensions, investigate the specific employee experiences underlying those dimensions, test targeted organizational changes, and evaluate subsequent outcomes using longitudinal employee-listening data.
+
+**Interpretation note**: This is an observational, cross-sectional analysis. The results identify associations and potential improvement priorities; they should not be interpreted as evidence of causal effects.
+
+\newpage
+
+# Significance
+Employee experience is not simply an employee-satisfaction topic. It is relevant to organizational outcomes such as retention, wellbeing, performance, and employees' willingness to advocate for their organization.
+
+Employee happiness is particularly relevant because positive experiences at work have been associated with lower turnover intentions. Research examining workplace experience and turnover has found that positive work experiences and wellbeing are negatively related to employees' intentions to leave (George & Jones, 1996). More recent research similarly finds a relationship between employee experience, wellbeing, and turnover intentions, reinforcing the practical importance of understanding the conditions associated with positive employee experiences (Employee Experience, Well-being and Turnover Intentions in the Workplace, 2025).
+
+For organizations, this creates a practical People Analytics question: 
+
+> Which aspects of the employee experience are most strongly associated with positive employee outcomes, and where should organizations focus additional investigation?
+
+Employee advocacy provides a complementary perspective. An employee who would recommend an organization to others represents a different aspect of the employment relationship than an employee who simply reports being happy. Advocacy can therefore provide an additional signal about employees' overall evaluation of their workplace and their willingness to associate themselves with the organization.
+
+This distinction motivates the use of both employee Happiness and employee advocacy (eNPS) as outcomes. Rather than assuming that one employee-experience dimension captures the entire employment relationship, the analysis examines whether different experience dimensions are associated with different workforce outcomes.
 
 # Business Questions
 
-This analysis was designed to answer four core questions that matter to organizational performance:
+This analysis addresses four People Analytics questions:
 
-1. Which workplace experiences most strongly influence employee advocacy (eNPS)?
-2. Which experiences most strongly influence employee Happiness?
-3. Which improvement opportunities provide the greatest return on investment?
-4. Do these relationships remain after accounting for differences across teams and managers?
+1. Which workplace experiences are most strongly associated with employee advocacy (eNPS)?
+2. Which workplace experiences are most strongly associated with employee Happiness?
+3. Which experience dimensions represent the highest-priority improvement opportunities?
+4. Do these relationships remain after accounting for employees being nested within teams?
 
-# Why These Outcomes Matter
+# Analytical Approach
 
-Employee advocacy (eNPS) and Happiness are leading indicators of workforce performance and organizational health. Employees who feel aligned, supported, and psychologically safe are more likely to stay, more likely to perform, and more likely to recommend the organization to others.
+The analysis combines complementary methods to move from data preparation and measurement to relationship modeling, prioritization, and organizational context.
 
-High advocacy strengthens employer brand and improves referral quality, reducing recruiting costs. High happiness reduces burnout, increases productivity, and improves team climate. Because these outcomes influence retention, performance, and talent acquisition, improving the experience drivers behind them has direct financial and operational impact.
+- **SQL:** Supports data preparation and cleaning before statistical analysis.
+- **Multiple Imputation (MICE):** Addresses missing survey responses while retaining information from the observed data.
+- **Psychometrics:** Evaluates the reliability and validity of employee-experience measures before modeling relationships among constructs.
+- **Partial Least Squares-Structural Equation Modeling (PLS-SEM):** Estimates relationships among latent employee-experience constructs and employee outcomes.
+- **Importance–Performance Map Analysis (IPMA):** Combines estimated importance with current performance to identify potential improvement priorities.
+- **Multilevel modeling (HLM):** Accounts for employees being nested within teams and evaluates whether employee-level relationships remain after accounting for team-level clustering.
 
-Alignment, Wellbeing, Rewards, and Intrinsic Motivation are not “soft” drivers—they are measurable levers that shape workforce stability, execution quality, and organizational resilience.
+Using multiple analytical approaches provides converging evidence while allowing each method to answer a different People Analytics question.
 
-# Why These Methods?
+# Data & Measurement
+## Data Source
 
-PLS‑SEM allows us to model latent experience constructs and estimate the strength of relationships between workplace experiences and outcomes. IPMA allows us to identify and visualize high‑impact, high‑ROI improvement opportunities by combining importance and performance. HLM accounts for employees nested within teams and quantifies team‑level effects on eNPS and Happiness.
+The analysis uses publicly available, de-identified employee survey data from the **Employee Stress & Experience** dataset available through Kaggle.
 
-## Key Findings
+The dataset contains survey measures of workplace experience, including Alignment, Rewards, Wellbeing, Feedback, Relationships, and Intrinsic Motivation, along with employee advocacy (eNPS), Happiness, and team-level information.
 
-### 1. Drivers of eNPS (PLS-SEM)
+The dataset was selected to demonstrate an end-to-end People Analytics workflow using realistic employee listening data.
+
+## Measurement Hierarchy
+
+```{r figure_schematic, fig.align='center', out.width='70%', fig.cap="Employee-Experience Measurement Hierarchy. Individual survey items are organized into 18 factor-level constructs, which are represented within six higher-order employee-experience domains used as predictors of employee advocacy and Happiness"}
+knitr::include_graphics("D:/Employee-Engagement-Portfolio/Outputs/Engagement_Schematic.png")
+
+```
+
+**Measurement hierarchy**. Individual survey items are organized into 18 factor-level constructs representing more specific aspects of the employee experience. These factors are then organized into six broader employee-experience domains: Relationships, Intrinsic Motivation, Feedback, Alignment, Wellbeing, and Rewards. The six domains serve as the primary predictors in the structural models, with employee advocacy (eNPS) and Happiness modeled as outcomes.
+
+
+## Employee-Experience Measures
+
+The analysis focuses on six latent employee-experience constructs:
+
+- **Relationships**
+- **Intrinsic Motivation**
+- **Feedback**
+- **Alignment**
+- **Wellbeing**
+- **Rewards**
+
+These six domains represent the higher-level constructs used in the primary structural models. Each domain is composed of underlying employee-experience factors derived from the survey structure.
+
+### Descriptive Statistics
+
+```{r}
+composites_desc_6 <-read.csv("D:/Employee-Engagement-Portfolio/Outputs/construct_descriptives.csv")
+kable(composites_desc_6[,1:4],
+      digits = 2, 
+      align = c('l','c','c','c'), col.names = c("", "N", "Mean", "SD"),
+      caption = "Employee-Experience Domain Descriptives")
+```
+
+## Outcomes
+
+Two employee-level outcomes are examined:
+
+- **Employee Advocacy (eNPS)**
+- **Employee Happiness**
+
+These outcomes were selected as indicators of how employees evaluate and experience their workplace.
+
+## Measurement Strategy
+
+Because employee-experience constructs such as Wellbeing, Alignment, and Intrinsic Motivation are latent variables rather than directly observed characteristics, the analysis evaluates the quality of their measurement before estimating relationships with the outcomes.
+
+Measurement evaluation includes:
+
+- Internal consistency and reliability
+- Indicator loadings
+- Discriminant validity
+- Multicollinearity
+- Construct correlations
+- Intraclass correlations
+
+This measurement-first approach reduces the risk of interpreting relationships among poorly measured constructs.
+
+## Measurement Quality
+
+The psychometric evaluation provides the foundation for subsequent structural modeling.
+
+Rather than treating individual survey items as independent predictors, the analysis evaluates whether groups of items adequately represent the intended employee-experience constructs. This is particularly important when using latent-variable methods such as PLS-SEM.
+
+The measurement assessment examines internal consistency, indicator performance, discriminant validity, and relationships among constructs before interpreting structural paths.
+
+Detailed measurement diagnostics are reported in the technical outputs generated by the analysis pipeline.
+
+## Missing Data
+
+Missing survey responses were addressed using **Multiple Imputation by Chained Equations (MICE)** to reduce the potential loss of information associated with complete-case analysis.
+
+The imputation procedure was implemented before construction of the employee-experience factors and subsequent structural modeling. This approach preserves information from partially observed responses rather than restricting the analysis to respondents with complete observations across all variables.
+
+The resulting analytical dataset contains approximately 6,100 employee observations, with the exact number varying slightly across constructs because of variable-specific missingness.
+
+The imputation procedure is implemented in the reproducible analysis pipeline and is documented in `02_imputation.R`.
+
+## Multilevel Structure
+
+Employee responses are nested within teams. Consequently, observations from employees within the same team may be more similar to one another than observations from employees in different teams.
+
+This clustering is addressed through multilevel modeling, allowing the analysis to distinguish employee-level relationships from team-level variation.
+
+# Results
+## Employee Advocacy (eNPS)
+### PLS-SEM
 
 ```{r Tbl_eNPS}
 construct_labels <- c(
@@ -70,8 +189,7 @@ construct_labels <- c(
   Intrinsic_Motivation = "Intrinsic Motivation"
 )
 
-
-read.csv("Outputs/PLS_SEM/paths_ci_eNPS.csv") %>%
+read.csv("D:/Employee-Engagement-Portfolio/Outputs/PLS_SEM/paths_ci_eNPS.csv") %>%
   mutate(Construct = construct_labels[X]) %>%
   arrange(desc(Path)) %>%
   select(Construct, Path, Lower.95..CI, Upper.95..CI) %>%
@@ -83,72 +201,37 @@ read.csv("Outputs/PLS_SEM/paths_ci_eNPS.csv") %>%
   kable(
     digits = 2,
     align = "c",
-    escape = FALSE
+    escape = FALSE,
+    caption = "eNPS Structural Coefficients"
   ) %>%
   kable_styling(full_width = FALSE)
 ```
 
-For eNPS, Alignment, Rewards, and Wellbeing are the strongest and most reliable drivers. Intrinsic Motivation contributes moderately, while Relationships shows a small and uncertain effect. Feedback’s negative coefficient reflects a suppression effect, meaning its unique influence is masked by overlap with other predictors rather than indicating harm.
+Alignment, Rewards, and Wellbeing show the strongest positive associations with employee advocacy. Intrinsic Motivation shows a more moderate association, while Relationships has a smaller and less certain estimate.
 
-The PLS‑SEM coefficients ($\beta$) represent the strength and direction of each experience domain’s influence on eNPS and Happiness. Larger absolute values indicate stronger effects, and confidence intervals that do not include zero indicate statistically reliable relationships. The 95% confidence interval shows the range of plausible values for each coefficient. When the interval does not include zero, the effect is statistically reliable. When the interval includes zero, the effect is weaker or uncertain.
+Feedback exhibits a negative coefficient in the multivariate model. This pattern is consistent with statistical suppression and should not be interpreted as evidence that feedback is harmful. Because employee-experience dimensions are correlated, the coefficient represents the estimated association of Feedback after accounting for the other constructs in the model.
 
-### 2. Drivers of eNPS (IPMA)
+### Importance–Performance Analysis
 
-```{r Fig_IPMA_eNPS, fig.align='center', out.width='70%'}
-knitr::include_graphics("Outputs/PLS_SEM/IPMA/ipma_enps.png")
+```{r Fig_IPMA_eNPS, fig.align='center', out.width='70%', fig.cap="Importance–Performance Map for Employee Advocacy (eNPS). The map positions the six employee-experience domains according to their estimated importance to eNPS and their current performance, highlighting Alignment and Rewards as prominent improvement priorities."}
+knitr::include_graphics("D:/Employee-Engagement-Portfolio/Outputs/IPMA/ipma_enps.png")
 ```
 
-High‑ROI opportunities: Alignment and Rewards. Each point represents an experience domain positioned by its importance (horizontal axis) and performance (vertical axis). Importance reflects how strongly the domain influences eNPS; performance shows how well employees rate the organization in that area.
+The Importance–Performance Map identifies **Alignment and Rewards** as the most prominent improvement priorities for employee advocacy. These constructs combine relatively strong importance with comparatively greater opportunity for improvement.
 
-Domains far to the right are stronger drivers of eNPS, while those higher on the chart are performing better. The most valuable improvement opportunities are those with high importance but lower performance—they have the greatest potential impact if improved.
+Wellbeing also shows a meaningful association with eNPS but represents a lower-priority opportunity relative to Alignment and Rewards based on the importance–performance profile.
 
-In this map, Alignment and Rewards fall into that high‑importance/low‑performance quadrant, making them high‑ROI priorities. Wellbeing, though positive, sits closer to the middle: it contributes meaningfully but less powerfully to eNPS compared with Alignment and Rewards, so it’s a secondary focus rather than a top investment area.
+**People Analytics implication**: Alignment and Rewards warrant targeted follow-up listening to identify the specific workplace experiences contributing to lower performance in these areas.
 
-### 3. Drivers of Happiness (PLS‑SEM)
-
-```{r Tbl_Happy}
-read.csv("Outputs/PLS_SEM/paths_ci_Happy.csv") %>%
-  mutate(Construct = construct_labels[X]) %>%
-  arrange(desc(Path)) %>%
-  select(Construct, Path, Lower.95., Upper.95.) %>%
-  rename(
-    `β` = Path,
-    `Lower 95%` = Lower.95.,
-    `Upper 95%` = Upper.95.
-  ) %>%
-  kable(
-    digits = 2,
-    align = "c",
-    escape = FALSE
-  ) %>%
-  kable_styling(full_width = FALSE)
-```
-
-For Happiness, Wellbeing, Intrinsic Motivation, and Alignment exert the strongest influence. Rewards con tributes modestly. Feedback and Relationships have confidence intervals that include zero, indicating weaker or uncertain effects. As with eNPS, Feedback’s coefficient reflects suppression rather than a negative impact.
-
-### 4. Priority Map for Happiness (IPMA) 
-
-```{r Fig_IPMA_Happy, fig.align='center', out.width='70%'}
-knitr::include_graphics("Outputs/PLS_SEM/IPMA/ipma_happy.png")
-```
-
-The x‑axis shows how strongly each experience dimension influences employee happiness while the y‑axis shows how well employees say the organization is currently delivering on that dimension. High‑importance/low‑performance domains represent the best improvement opportunities. In this map, Wellbeing, Intrinsic Motivation, and Alignment combine strong influence with moderate performance, making them the most effective levers for improving Happiness.
-
-### 5. Team‑Level Effects (HLM)
-
+### Multilevel Model
 ```{r Tab_setup}
-library(dplyr)
-library(knitr)
-library(kableExtra)
-
-
 # 1. Load data
 
-icc <- read.csv("Outputs/Diagnostics/ICC_values.csv")
-r2_e <- read.csv("Outputs/HLM/hlm_r2_eNPS.csv")
-r2_h <- read.csv("Outputs/HLM/hlm_r2_happy.csv")
-fe_e <- read.csv("Outputs/HLM/hlm_fixed_effects_eNPS.csv")
-fe_h <- read.csv("Outputs/HLM/hlm_fixed_effects_happy.csv")
+icc <- read.csv("D:/Employee-Engagement-Portfolio/Outputs/Diagnostics/ICC_values.csv")
+r2_e <- read.csv("D:/Employee-Engagement-Portfolio/Outputs/HLM/hlm_r2_eNPS.csv")
+r2_h <- read.csv("D:/Employee-Engagement-Portfolio/Outputs/HLM/hlm_r2_happy.csv")
+fe_e <- read.csv("D:/Employee-Engagement-Portfolio/Outputs/HLM/hlm_fixed_effects_eNPS.csv")
+fe_h <- read.csv("D:/Employee-Engagement-Portfolio/Outputs/HLM/hlm_fixed_effects_happy.csv")
 
 # 2. Clean predictor names
 
@@ -200,7 +283,7 @@ table_eNPS <- bind_rows(
       t = as.character(round(statistic, 3)),
       df = as.character(round(df, 2)),
       p = ifelse(p.value < .001, "<.001", as.character(round(p.value, 3))),
-      CI = paste0("[", round(conf.low, 2), ", ", round(conf.high, 2), "]")
+      CI = paste0("[", round(X2.50., 2), ", ", round(X97.50., 2), "]")
     )
 )
 
@@ -230,7 +313,7 @@ table_Happy <- bind_rows(
       t = as.character(round(statistic, 3)),
       df = as.character(round(df, 2)),
       p = ifelse(p.value < .001, "<.001", as.character(round(p.value, 3))),
-      CI = paste0("[", round(conf.low, 2), ", ", round(conf.high, 2), "]")
+      CI = paste0("[", round(X2.50., 2), ", ", round(X97.50., 2), "]")
     )
 )
 
@@ -249,13 +332,44 @@ kable(
 
 ```
 
-For eNPS, Alignment, Rewards, Wellbeing, and Intrinsic Motivation are the strongest multilevel predictors. Their coefficients are large, positive, and have confidence intervals that exclude zero. Feedback shows a negative coefficient consistent with the suppression pattern observed in PLS‑SEM. Relationships and Tenure (years) have small and uncertain effects. The model explains substantial variance (Marginal $R^2$ = 0.621; Conditional $R^2$ = 0.644).
+For eNPS, Alignment, Rewards, Wellbeing, and Intrinsic Motivation show the strongest positive multilevel associations. Feedback shows a negative coefficient consistent with the suppression pattern observed in PLS-SEM. Relationships and Tenure (years) have smaller and less certain associations.
 
-In the HLM models, the fixed‑effects coefficients represent the average effect of each predictor across teams, controlling for team‑level (random-effects) clustering. Larger absolute coefficients indicate stronger multilevel influence. Positive coefficients indicate that higher scores on the predictor are associated with higher outcome values; negative coefficients indicate the opposite.
+The multilevel model explains 62.1% of outcome variance through fixed effects (marginal $R^2$ = 0.621) and 64.4% through fixed and random effects combined (conditional $R^2$ = 0.644).
 
-The Intraclass Correlation Coefficient (ICC) quantifies how much variability in the outcome is attributable to differences between teams. Higher ICC values indicate stronger team‑level clustering.
+## Employee Happiness
+### PLS-SEM
+```{r Tbl_Happy}
+read.csv("D:/Employee-Engagement-Portfolio/Outputs/PLS_SEM/paths_ci_Happy.csv") %>%
+  mutate(Construct = construct_labels[X]) %>%
+  arrange(desc(Path)) %>%
+  select(Construct, Path, Lower.95., Upper.95.) %>%
+  rename(
+    `β` = Path,
+    `Lower 95%` = Lower.95.,
+    `Upper 95%` = Upper.95.
+  ) %>%
+  kable(
+    digits = 2,
+    align = "c",
+    escape = FALSE,
+    caption = "Happiness Structural Coefficients"
+  ) %>%
+  kable_styling(full_width = FALSE)
+```
 
-The marginal $R^2$ reflects the variance explained by fixed effects (employee experience drivers) alone while conditional $R^2$ reflects the variance explained by both fixed and random effects.
+Wellbeing, Intrinsic Motivation, and Alignment show the strongest positive associations with Happiness. Rewards shows a more modest positive association, while Feedback and Relationships have less certain estimates whose confidence intervals include zero.
+
+### Importance–Performance Analysis
+
+```{r Fig_IPMA_Happy, fig.align='center', out.width='70%', fig.cap="Importance–Performance Map for Employee Happiness. The map positions the six employee-experience domains according to their estimated importance to Happiness and their current performance, highlighting Wellbeing, Intrinsic Motivation, and Alignment as prominent improvement priorities."}
+knitr::include_graphics("D:/Employee-Engagement-Portfolio/Outputs/IPMA/ipma_happy.png")
+```
+
+Wellbeing, Intrinsic Motivation, and Alignment represent the most prominent improvement priorities for Happiness based on their combination of importance and current performance.
+
+These findings provide a basis for targeted follow-up listening to understand which specific aspects of wellbeing, meaningful work, and organizational alignment are most important to employees.
+
+### Multilevel Model
 
 ```{r Tab_HLM_Happy}
 # ---- Table 2: Happiness ----
@@ -270,49 +384,188 @@ kable(
 
 ```
 
-For Happiness, Wellbeing, Intrinsic Motivation, and Alignment are the strongest multilevel drivers. Rewards contributes modestly. Feedback and Relationships show small, uncertain effects. Tenure (years) has no meaningful influence. The model explains moderate variability (Marginal $R^2$ = 0.441; Conditional $R^2$ = 0.476), reflecting both individual and team‑level contributions.
+For Happiness, Wellbeing, Intrinsic Motivation, and Alignment show the strongest positive multilevel associations. Rewards shows a more modest association, while Feedback and Relationships have smaller and less certain estimates. Tenure (years) shows no meaningful association.
+
+The multilevel model accounts for 44.1% of the variance through fixed effects (marginal $R^2$ = 0.441) and 47.6% through fixed and random effects combined (conditional $R^2$ = 0.476).
+
+The difference between marginal and conditional $R^2$ indicates that accounting for team-level variation provides additional explanatory information beyond the fixed employee-experience predictors. This difference is larger for Happiness than for eNPS, suggesting that team context may be particularly relevant to variation in employee Happiness.
+
+These results do not identify which specific team or manager practices account for this variation. They instead provide a basis for further investigation using team-level measures, manager effectiveness data, or longitudinal employee-listening data.
+
+# Structural Relationships and Predictor Overlap
+
+The six employee-experience domains are conceptually related and are therefore expected to share variance. Examining these relationships provides context for interpreting the multivariate structural models and helps identify situations in which predictor overlap may affect individual path estimates.
+
+The correlation matrix below shows the observed relationships among the six employee-experience domains. These correlations provide descriptive context for the subsequent PLS-SEM models; they are not themselves estimates of the structural relationships modeled in PLS-SEM.
+
+```{r fig_corr, fig.align='center', fig.cap="Correlations Among Employee-Experience Domains. The matrix shows the observed correlations among the six higher-order employee-experience constructs used as predictors in the structural models.", out.width='70%'}
+domain.cor<- read.csv("D:/Employee-Engagement-Portfolio/Outputs/Diagnostics/domain_correlations.csv",row.names = 1, check.names = FALSE)
+
+corrplot::corrplot(
+  as.matrix(domain.cor[1:6, 1:6]),
+  method = "number",
+  type = "upper",
+  tl.col = "black",
+  tl.srt = 45,
+  number.cex = 0.8)
+
+```
+
+The correlations indicate that the employee-experience domains are related rather than independent dimensions. This overlap is expected given the hierarchical structure of the employee-experience measurement model. At the same time, substantial correlations create the possibility that the estimated contribution of one predictor may change when the other predictors are included simultaneously.
+
+This distinction is important for interpreting the structural models. A domain can have a positive relationship with an outcome when considered on its own while receiving a smaller, nonsignificant, or even negative coefficient when the shared variance among predictors is modeled simultaneously.
+
+## Predictor Collinearity
+
+Correlation provides an initial view of predictor overlap, but correlations alone do not determine whether multicollinearity is problematic in a multivariate model. Variance Inflation Factors (VIFs) provide a more direct assessment of how much the variance of an estimated coefficient is inflated because of overlap among predictors.
+
+```{r tab_vif}
+vif_enps <- read.csv(
+  "D:/Employee-Engagement-Portfolio/Outputs/Diagnostics/eNPS_inner_VIF.csv"
+)
+
+vif_happy <- read.csv(
+  "D:/Employee-Engagement-Portfolio/Outputs/Diagnostics/Happy_inner_VIF.csv"
+)
+
+vif_table <- vif_enps %>%
+  select(X, x) %>%
+  rename(
+    Construct = X,
+    `eNPS VIF` = x
+  ) %>%
+  left_join(
+    vif_happy %>%
+      select(X, x) %>%
+      rename(
+        Construct = X,
+        `Happiness VIF` = x
+      ),
+    by = "Construct"
+  )
+
+kable(
+  vif_table,
+  digits = 2,
+  align = c("l", "c", "c"),
+  caption = "Inner VIF values for the structural models"
+) %>%
+  kable_styling(
+    full_width = FALSE,
+    position = "center"
+  )
+```
+
+The VIF results provide a second diagnostic for predictor overlap. The purpose of this assessment is not to eliminate correlated employee-experience domains simply because they are related. Instead, it establishes whether the degree of overlap is sufficiently large to complicate interpretation of the structural coefficients.
+
+## Suppression in the Structural model
+
+Feedback provides an important example of why multivariate People Analytics results require careful interpretation. Although Feedback has a positive bivariate relationship with the outcomes, its coefficient becomes negative when the correlated employee-experience domains are modeled simultaneously. This pattern is consistent with statistical suppression.
+
+The negative coefficient should not be interpreted as evidence that Feedback is harmful. Instead, it indicates that the estimated unique association of Feedback changes after accounting for variance shared with the other employee-experience domains. The correlation matrix and VIF diagnostics provide context for understanding this predictor overlap, while the PLS-SEM coefficient reflects the relationship remaining after the other predictors are included in the model.
+
+This distinction illustrates the difference between **descriptive association** and **multivariate prediction**. For People Analytics applications, individual coefficients should therefore be interpreted within the context of the full measurement and structural model rather than in isolation.
 
 # Integrated Interpretation
 
-Across all analytic methods, eNPS emerges as a strategic outcome, driven primarily by Alignment, Rewards, and Wellbeing. These domains consistently show strong, positive coefficients and reliable confidence intervals in both PLS‑SEM and HLM, indicating that improvements in strategic clarity, fairness, and support will meaningfully elevate employee advocacy.
+Across the analytical approaches, several employee-experience dimensions demonstrate consistent associations with the outcomes.
 
-Happiness emerges as an experiential outcome, driven most strongly by Wellbeing, Intrinsic Motivation, and Alignment. These domains consistently demonstrate reliable effects across methods, highlighting the importance of psychological safety, meaningful work, and clarity of expectations in shaping day‑to‑day employee experience.
+For employee advocacy, **Alignment, Rewards, and Wellbeing** emerge as the most prominent positive correlates. These dimensions show relatively strong associations in the PLS-SEM and multilevel models, while Alignment and Rewards also emerge as prominent improvement priorities in the Importance–Performance Map Analysis. The convergence of these findings suggests that these areas warrant further organizational investigation.
 
-Team climate amplifies both outcomes, especially Happiness, as reflected by the ICC values and the strength of multilevel predictors. Feedback’s negative coefficients reflect suppression, not harm; its unique contribution is masked by overlap with other drivers rather than indicating a detrimental effect.
+For employee Happiness, **Wellbeing, Intrinsic Motivation, and Alignment** show the strongest associations across the structural models. The Importance–Performance Map Analysis similarly identifies these dimensions as prominent improvement priorities, providing a consistent signal that wellbeing, meaningful work, and organizational alignment deserve further attention.
 
-Together, these results show that strengthening Alignment, Wellbeing, Rewards, Intrinsic Motivation, and Relationships will produce measurable improvements in both eNPS and Happiness.
+The multilevel analysis adds an organizational context that is not captured by employee-level structural models alone. The difference between marginal and conditional $R^2$ indicates that team-level variation contributes additional explanatory information, with this difference being larger for Happiness than for eNPS. This suggests that team context may be particularly relevant to differences in employee Happiness.
 
-# Recommendations
+The predictor-overlap diagnostics provide an important qualification to these findings. The correlation matrix and VIF results indicate that the employee-experience domains are related, while the Feedback suppression pattern demonstrates how shared variance can affect individual structural coefficients. Consequently, the results are best interpreted as a set of complementary signals rather than as independent rankings of employee-experience dimensions.
 
-1. Strengthen Strategic Alignment 
-  + Conduct a quarterly “Priorities Reset” meeting where senior leaders clarify top 3 organizational priorities and communicate them through managers within one week.
-  + Implement a standardized team‑level alignment ritual (e.g., weekly 10‑minute “What matters this week?” check‑ins). 
-  + Audit communication channels to eliminate conflicting or redundant messages that dilute clarity.
-2. Enhance Fairness & Recognition
-  + Launch a transparent recognition framework that defines what “excellent performance” looks like and how it is rewarded.
-  + Introduce peer‑to‑peer recognition tools (e.g., monthly shout‑outs, digital badges) to increase fairness and visibility.
-  + Train managers to deliver recognition weekly using a simple “SBI” (Situation–Behavior–Impact) format.
-3. Invest in Team‑Level wellbeing
-  + Implement workload balancing reviews every two weeks to identify overload risks early.
-  + Train managers to spot wellbeing red flags (withdrawal, irritability, reduced engagement) and intervene within 48 hours.
-  + Establish team psychological safety norms (e.g., “no‑blame retros,” “one dissenting voice required”) to reduce stress and increase trust.
-4. Build stronger workplace relationships
-  + Introduce structured collaboration rituals such as rotating pair‑work, cross‑team problem‑solving sessions, or monthly “team connection” activities.
-  + Train managers to facilitate inclusive discussions where each team member speaks at least once.
-  + Encourage teams to adopt shared norms (e.g., “assume positive intent,” “ask before escalating”) to reduce interpersonal friction.
-5. Reinforce meaningful work experiences 
-  + Require managers to hold quarterly “role impact conversations” where employees map their work to organizational outcomes.
-  + Increase autonomy by allowing employees to choose one project or task per quarter that aligns with their strengths.
-  + Publish team‑level “impact dashboards” showing how work contributes to customer, business, or mission outcomes.
-6. Redesign Feedback Practices. 
-   + Separate feedback from evaluation by creating two distinct conversations: Development Feedback (monthly) and Performance Evaluation (quarterly or bi‑annually)
-   + Train managers to use a two‑way feedback model (“What’s working? What’s not? What should we adjust?”).
-   + Introduce a simple feedback rubric to ensure consistency across teams and reduce ambiguity.
+Taken together, the findings support a **measurement-informed, multilevel approach to employee listening**:
 
-# Estimated Impact
+1. Identify reliable employee-experience constructs.
+2. Examine their relationships with workforce outcomes.
+3. Account for organizational and team-level context.
+4. Identify high-priority areas through importance–performance analysis.
+5. Conduct targeted follow-up listening to understand the specific experiences underlying those priorities.
+6. Evaluate changes longitudinally before concluding that an intervention produced an improvement.
 
-Improvements in alignment and wellbeing are projected to increase eNPS by ~15 points and Happiness by ~12 points.
+# People Analytics Recommendations
+
+The findings identify several employee-experience dimensions that warrant further organizational investigation. The recommendations below translate those findings into potential areas for targeted listening, intervention design, and evaluation.
+
+Because the analysis is observational, these recommendations should be treated as **testable organizational hypotheses rather than causal prescriptions**.
+
+1. Investigate Strategic Alignment
+
+Alignment is one of the strongest and most consistent correlates of employee advocacy and also emerges as a prominent improvement priority.
+
++ Conduct targeted listening to determine whether employees understand organizational and team priorities.
++ Identify communication gaps or conflicting messages that may reduce clarity. 
++ Test team-level alignment practices and evaluate changes in Alignment scores over time.
+
+2. Evaluate Recognition & Rewards
+
+Rewards shows a strong association with employee advocacy and represents a prominent improvement priority in the eNPS Importance–Performance Map.
+
++ Examine whether employees perceive recognition and rewards as fair, transparent, and meaningfully connected to performance.
++ Use targeted survey or qualitative listening to identify specific recognition practices associated with stronger employee perceptions.
++ Evaluate whether changes in recognition practices are followed by changes in Rewards and employee advocacy measures.
+
+3. Investigate Team Wellbeing
+
+Wellbeing is consistently associated with both employee advocacy and Happiness and represents an important improvement priority.
+
++ Use team-level listening to identify where workload, stress, or wellbeing concerns are concentrated.
++ Examine whether wellbeing patterns differ across teams or managers.
++ Evaluate targeted wellbeing or workload interventions using repeated employee-listening measures.
+
+4. Strengthen Meaningful Work and Workplace Relationships
+
+Intrinsic Motivation is particularly relevant to Happiness, while Relationships provides additional context for understanding the employee experience.
+
++ Investigate whether employees experience meaning, autonomy, and connection between their work and organizational outcomes.
++ Examine whether meaningful-work and relationship experiences vary across roles or teams.
++ Use qualitative or pulse-survey data to identify barriers to collaboration, connection, or meaningful work.
+
+5. Evaluate Feedback Practices
+
+The Feedback suppression pattern demonstrates why feedback should be examined carefully rather than interpreted solely from its multivariate coefficient.
+
++ Distinguish developmental feedback from formal performance evaluation where appropriate.
++ Use two-way feedback practices that allow employees and managers to identify what is working and what should change.
++ Evaluate whether redesigned feedback practices improve perceptions of Feedback and whether those changes correspond with changes in eNPS or Happiness over time.
+
+6. Evaluate Changes Longitudinally
+
+The most important next step is to determine whether organizational changes are followed by measurable changes in employee experience and outcomes.
+
+Organizations could use repeated employee-listening data to evaluate whether changes in high-priority dimensions are followed by changes in eNPS, Happiness, retention, or other workforce outcomes. A longitudinal design would provide stronger evidence about temporal relationships than the current cross-sectional analysis
+
+# Limitations
+
+Several limitations should be considered when interpreting the findings.
+
+- **Observational design**: The analysis identifies associations rather than causal effects. Strong statistical relationships should therefore not be interpreted as evidence that changing a particular employee-experience dimension will necessarily change an outcome.
+- **Cross-sectional data**: The survey data provide a snapshot of employee experience at one point in time. The analysis cannot establish temporal ordering or determine whether changes in employee-experience dimensions precede changes in advocacy or Happiness.
+- **Self-reported measures**: The primary constructs and outcomes are based on employee survey responses and may be affected by response bias, common-method bias, or differences in how employees interpret survey items.
+- **Generalizability**: The dataset is publicly available and may not represent the workforce, organizational structure, or employee population of other organizations. Findings should therefore be validated against organization-specific employee-listening data before being used to guide decisions.
+- **Construct overlap**: Employee-experience dimensions are conceptually and statistically related. This overlap can affect individual structural coefficients, as demonstrated by the Feedback suppression pattern. The constructs should therefore be interpreted jointly rather than as completely independent predictors.
+- **Team-level structure**: Multilevel modeling accounts for employee clustering within teams, but the available data do not capture every organizational level or contextual factor that could contribute to differences between employees and teams.
+
+These limitations do not eliminate the analytical value of the findings. Rather, they define the appropriate scope of interpretation: the results identify patterns, associations, and potential areas for investigation, while longitudinal and organization-specific data would be required to evaluate whether targeted interventions produce measurable changes.
 
 # Conclusion
 
-Employee advocacy is shaped by strategic clarity, fairness, and support. Happiness is shaped by wellbeing, relationships, and meaningful work. Team climate amplifies both outcomes, especially Happiness. Feedback requires redesign to function as a distinct driver. Strengthening alignment, fairness, wellbeing, relationships, and meaningful work will elevate both eNPS and Happiness in measurable, scalable ways.
+This analysis demonstrates how employee-listening data can be transformed into actionable People Analytics insights through the combination of psychometric measurement, PLS-SEM, Importance–Performance Map Analysis, and multilevel modeling.
+
+Across the analytical approaches, **Alignment, Rewards, and Wellbeing** emerge as the strongest and most consistent correlates of employee advocacy, while **Wellbeing, Intrinsic Motivation, and Alignment** show the strongest associations with employee Happiness. The Importance–Performance analyses further identify several of these dimensions as potential priorities for organizational investigation.
+
+The multilevel analysis adds important organizational context by demonstrating that team-level variation contributes additional explanatory information, particularly for Happiness. At the same time, the predictor-overlap and suppression analyses demonstrate why employee-experience dimensions should be interpreted within the context of the broader measurement and structural models rather than as isolated predictors.
+
+Importantly, the findings identify **areas for investigation rather than causal intervention effects**. The next step would be to use longitudinal employee-listening data to test whether targeted changes in high-priority experience dimensions are followed by changes in advocacy, Happiness, retention, or other workforce outcomes. The broader People Analytics value of this approach is the integration of **measurement quality, statistical modeling, organizational context, and business interpretation** into a reproducible employee-experience analytics workflow.
+
+\newpage
+
+# Works Cited
+
+George, Jennifer M., and Gareth R. Jones. “The Experience of Work and Turnover Intentions: Interactive Effects of Value Attainment, Job Satisfaction, and Positive Mood.” Journal of Applied Psychology, vol. 81, no. 3, 1996, pp. 318–325. https://doi.org/10.1037/0021-9010.81.3.318. 
+
+Nair, Sridevi, Aparna Hawaldar, and Arti Kumar. “Employee Experience, Well-Being and Turnover Intentions in the Workplace.” International Journal of Organizational Analysis, vol. 33, no. 8, 2025, pp. 2287–2306. https://doi.org/10.1108/IJOA-06-2024-4567.
